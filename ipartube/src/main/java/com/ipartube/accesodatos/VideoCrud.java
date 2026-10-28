@@ -11,7 +11,7 @@ import bibliotecas.accesodatos.BaseDeDatos;
 
 public class VideoCrud {
 	public static ArrayList<Video> obtenerTodos() {
-		try (PreparedStatement pst = BaseDeDatos.crearSentencia("SELECT * FROM productos");
+		try (PreparedStatement pst = BaseDeDatos.crearSentencia("SELECT * FROM videos");
 				ResultSet rs = pst.executeQuery()) {
 			ArrayList<Video> videos = new ArrayList<Video>();
 
@@ -23,7 +23,7 @@ public class VideoCrud {
 
 			return videos;
 		} catch (SQLException e) {
-			throw new RuntimeException("Error al obtener los productos", e);
+			throw new RuntimeException("Error al obtener los videos", e);
 		}
 	}
 }
