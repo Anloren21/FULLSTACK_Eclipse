@@ -18,7 +18,7 @@ for (const video of videos) {
 			  <iframe class="w-100 ratio-16x9" src="${video.url}" title="${video.titulo}" allowfullscreen></iframe>
 			</div>
 			<div class="card-body">
-				<h5 class="card-title"><a href="javascript:detalle()">${video.titulo}</a></h5>
+				<h5 class="card-title"><a href="javascript:detalle(${video.id})">${video.titulo}</a></h5>
 				<p class="card-text">${video.descripcion}</p>
 			</div>
 			<div class="card-footer">
@@ -40,11 +40,17 @@ function mostrar(id){
 	document.querySelector('#' + id).style.display = null;
 }
 
-window.detalle = function (){
-	document.querySelector('#detalle iframe').src = 'https://www.youtube.com/embed/VhZiiVnmrEY?si=duOKbyMuuaJE5W-c';
-	document.querySelector('#detalle .card-title').textContent = 'Video de Pedro';
-	document.querySelector('#detalle .card-text').textContent = 'Prueba de que esto se ve';
-	document.querySelector('#detalle .card-footer small').textContent = '2026-10-28';
+window.detalle = async function (id){
+	console.log(id);
+	
+	const respuesta = await fetch (URL + id);
+	const video = await respuesta.json();
+
+	
+	document.querySelector('#detalle iframe').src = video.url;
+	document.querySelector('#detalle .card-title').textContent = video.titulo;
+	document.querySelector('#detalle .card-text').textContent = video.descripcion;
+	document.querySelector('#detalle .card-footer small').textContent = video.fecha;
 	
 	mostrar('detalle');
 }
