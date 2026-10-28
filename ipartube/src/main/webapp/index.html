@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es" class="h-100">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,7 @@
 	crossorigin="anonymous"></script>
 <script type="module" src="js/index.js"></script>
 </head>
-<body>
+<body class="h-100 d-flex flex-column">
 	<nav class="navbar md:navbar-expand bg-1">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#">Ipartube</a>
@@ -33,17 +33,44 @@
 		</div>
 	</nav>
 
-	<h1>Mis Videos</h1>
+	<main class="container my-5 flex-grow-1">
+		<section id="listado">
+			<h2>Listado de Videos</h2>
+			<div id="listado-videos" class="row row-cols-1 md:row-cols-3 g-4">
 
-	<main class="container">
-		<div id="listado-videos" class="row row-cols-1 md:row-cols-3 g-4">
-			
-		</div>
+			</div>
+
+		</section>
+
+		<section id="detalle">
+			<div class="card  offset-lg-2 col-lg-8">
+				<div class="w-100 ratio-16x9 card-img">
+					<iframe class="w-100 ratio-16x9" src="${video.url}"
+						title="${video.titulo}" allowfullscreen></iframe>
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">
+						<a href="javascript:">${video.titulo}</a>
+					</h5>
+					<p class="card-text">${video.descripcion}</p>
+				</div>
+				<div class="card-footer">
+					<small class="text-body-secondary">${video.fecha}</small>
+				</div>
+			</div>
+		</section>
+
+		<section id=""></section>
+		<section id=""></section>
+		<section id=""></section>
 
 		<ul>
 		</ul>
 
 	</main>
 
+	<footer class="text-bg-dark p-2">
+		<p>&copy; 2026 Rjhu Lorraine</p>
+	</footer>
 </body>
 </html>
