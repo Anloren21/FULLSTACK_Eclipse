@@ -37,8 +37,7 @@ public class VideoRestServlet extends HttpServlet {
 		Long id = obtenerId(request);
 		
 		if(id != null) {
-			response.getWriter().append(GSON.toJson(new Video(1L, LocalDate.now(),
-					"https://www.youtube.com/embed/VhZiiVnmrEY?si=duOKbyMuuaJE5W-c", "Video Pedro", "Descripción del video")));
+			response.getWriter().append(GSON.toJson(AnonimoNegocio.verDetalleVideo(id)));
 			
 			return;
 		}

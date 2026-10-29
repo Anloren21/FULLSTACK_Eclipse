@@ -1,8 +1,10 @@
 package com.ipartube.logicanegocio;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import com.google.gson.JsonElement;
 import com.ipartube.accesodatos.VideoCrud;
 import com.ipartube.dtos.Video;
 
@@ -12,5 +14,12 @@ public class AnonimoNegocio {
 	public static ArrayList<Video> listarVideos(){
 		log.info("Se ha pedido el listados de videos");
 		return VideoCrud.obtenerTodos();
+	}
+
+	public static Video verDetalleVideo(Long id) {
+		log.info("Se ha pedido detalle del video " + id);
+		
+		return new Video (1L, LocalDate.now(), "https://www.youtube.com/embed/VhZiiVnmrEY?si=duOKbyMuuaJE5W-c", "Video de Pedro", 
+				"Descripción del video");
 	}
 }
