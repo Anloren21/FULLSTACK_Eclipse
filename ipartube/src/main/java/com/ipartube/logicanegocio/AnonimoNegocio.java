@@ -19,7 +19,6 @@ public class AnonimoNegocio {
 	public static Video verDetalleVideo(Long id) {
 		log.info("Se ha pedido detalle del video " + id);
 		
-		return new Video (1L, LocalDate.now(), "https://www.youtube.com/embed/VhZiiVnmrEY?si=duOKbyMuuaJE5W-c", "Video de Pedro", 
-				"Descripción del video");
+		return VideoCrud.obtenerPorId(id);
 	}
 }
