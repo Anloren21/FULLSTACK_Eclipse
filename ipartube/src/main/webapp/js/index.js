@@ -1,18 +1,21 @@
 const URL = 'api/v1/videos/';
 
-const listadoVideos= document.querySelector('#listado-videos');
+window.listado = async function (){
+	
+    //mostrar('listado');
 
-mostrar('listado');
+    const listadoVideos = document.querySelector('#listado-videos');
 
-const respuesta = await fetch(URL);
-const videos = await respuesta.json();
+    const respuesta = await fetch(URL);
+    const videos = await respuesta.json();
 
+	listadoVideos.innerHTML = null;
+	
+    for (const video of videos) {
+        const card = document.createElement('div');
 
-for (const video of videos) {
-    const card = document.createElement('div');
-
-	card.className = 'col';
-    card.innerHTML = `
+        card.className = 'col';
+        card.innerHTML = `
 		<div class="card h-100">
 			<div class="w-100 ratio-16x9 card-img">
 			  <iframe class="w-100 ratio-16x9" src="${video.url}" title="${video.titulo}" allowfullscreen></iframe>
@@ -27,7 +30,9 @@ for (const video of videos) {
 		</div>
 	</div>`;
 
-    listadoVideos.appendChild(card);
+        listadoVideos.appendChild(card);
+	}
+	mostrar('listado');
 }
 
 function mostrar(id){
@@ -54,3 +59,5 @@ window.detalle = async function (id){
 	
 	mostrar('detalle');
 }
+
+window.detalle(1);
