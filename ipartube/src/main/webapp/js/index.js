@@ -1,12 +1,41 @@
-const URL = 'api/v1/videos/';
+const URL_VIDEOS = 'api/v1/videos/';
+const URL_COMENTARIOS = 'api/v1/comentarios';
 
+let idVideo;
+
+const comentarioForm = document.querySelector('#detalle form');
+
+comentarioForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // @formatter off
+    const comentario = {
+        usuario: comentarioForm['comentario-nombre'].value,
+        texto: comentarioForm['comentario-texto'].value,
+		idVideo: idVideo
+	};
+	
+	console.log(comentario);
+	
+	const respuesta = await fetch(URL_COMENTARIOS, {
+		method: 'POST',
+		body: JSON.stringify(comentario),
+		headers: {'Content-type': 'application/json'},
+	});
+	
+	const comentarioRecibido = await respuesta.json();
+	
+	console.log(comentarioRecibido);
+});
+
+// @formatter on
 window.listado = async function() {
 
     //mostrar('listado');
 
     const listadoVideos = document.querySelector('#listado-videos');
 
-    const respuesta = await fetch(URL);
+    const respuesta = await fetch(URL_VIDEOS);
     const videos = await respuesta.json();
 
     listadoVideos.innerHTML = '';
@@ -46,9 +75,11 @@ function mostrar(id) {
 }
 
 window.detalle = async function(id) {
-    console.log(id);
+    //console.log(id);
 
-    const respuesta = await fetch(URL + id);
+	idVideo = id;
+	
+    const respuesta = await fetch(URL_VIDEOS + id);
     const video = await respuesta.json();
 
 
@@ -57,13 +88,13 @@ window.detalle = async function(id) {
     document.querySelector('#detalle .card-text').textContent = video.descripcion;
     document.querySelector('#detalle .card-footer small').textContent = video.fecha;
 
-    const respuestaComentarios = await fetch(`${URL}${id}/comentarios`);
+    const respuestaComentarios = await fetch(`${URL_VIDEOS}${id}/comentarios`);
     const comentarios = await respuestaComentarios.json();
 
-	const ul = document.querySelector('#detalle ul');
-	
-	ul.innerHTML = '';
-	
+    const ul = document.querySelector('#detalle ul');
+
+    ul.innerHTML = '';
+
     for (const comentario of comentarios) {
         const li = document.createElement('li');
 
@@ -80,8 +111,8 @@ window.detalle = async function(id) {
 				<p>${comentario.texto}</p>
 			</div>
 		`;
-		
-		ul.appendChild(li);
+
+        ul.appendChild(li);
     }
 
     mostrar('detalle');

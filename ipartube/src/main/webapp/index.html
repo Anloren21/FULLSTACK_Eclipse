@@ -59,26 +59,24 @@
 				</div>
 			</div>
 
-			<div>
-				<ul class="mt-4 list-group">
-					<li
-						class="list-group-item d-flex justify-content-between align-items-start py-4">
-						<div class="ms-2 w-100">
-							<div class="d-flex">
-								<div class="fw-bold me-auto">
-									<input id="comentario-nombre" class="form-control">
-								</div>
-								<span
-									class="badge theme-primary rounded-pill aligns-selfs-baseline">2026-11-02
-									11:00</span>
-							</div>
-							<textarea id="comentario-texto" class="form-control col"></textarea>
-							<button class="btn-solid theme-primary">Enviar
-								comentario</button>
+			<form
+				class="list-group-item d-flex justify-content-between align-items-start py-4 mt-4">
+				<div class="ms-2 w-100">
+					<div class="d-flex">
+						<div class="fw-bold me-auto">
+							<input name="comentario-nombre" class="form-control">
 						</div>
-					</li>
-				</ul>
-			</div>
+						<span class="badge theme-primary rounded-pill aligns-selfs-baseline">
+						<script>document.write(new Date().toISOString())</script></span>
+					</div>
+					<textarea name="comentario-texto" class="form-control col"></textarea>
+					<button class="btn-solid theme-primary">Enviar comentario</button>
+				</div>
+			</form>
+
+			<ul class="mt-4 list-group">
+				<li></li>
+			</ul>
 		</section>
 
 		<section id=""></section>
