@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.google.gson.JsonElement;
+import com.ipartube.accesodatos.ComentarioCrud;
 import com.ipartube.accesodatos.VideoCrud;
+import com.ipartube.dtos.Comentario;
 import com.ipartube.dtos.Video;
 
 public class AnonimoNegocio {
@@ -20,5 +22,11 @@ public class AnonimoNegocio {
 		log.info("Se ha pedido detalle del video " + id);
 		
 		return VideoCrud.obtenerPorId(id);
+	}
+	
+	public static ArrayList<Comentario> verComentariosVideo(Long idVideo) {
+		log.info("Se ha pedido el listado de comentarios del video " + idVideo);
+		
+		return ComentarioCrud.obtenerTodosPorIdVideo(idVideo); 
 	}
 }

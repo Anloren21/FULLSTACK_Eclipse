@@ -1,7 +1,7 @@
 const URL = 'api/v1/videos/';
 
-window.listado = async function (){
-	
+window.listado = async function() {
+
     //mostrar('listado');
 
     const listadoVideos = document.querySelector('#listado-videos');
@@ -9,8 +9,8 @@ window.listado = async function (){
     const respuesta = await fetch(URL);
     const videos = await respuesta.json();
 
-	listadoVideos.innerHTML = null;
-	
+    listadoVideos.innerHTML = '';
+
     for (const video of videos) {
         const card = document.createElement('div');
 
@@ -31,33 +31,60 @@ window.listado = async function (){
 	</div>`;
 
         listadoVideos.appendChild(card);
-	}
-	mostrar('listado');
+    }
+    mostrar('listado');
 }
 
-function mostrar(id){
-	const sections = document.querySelectorAll('main>section');
-	
-	for (const section of sections){
-		section.style.display = 'none'
-	}	
-	
-	document.querySelector('#' + id).style.display = null;
+function mostrar(id) {
+    const sections = document.querySelectorAll('main>section');
+
+    for (const section of sections) {
+        section.style.display = 'none'
+    }
+
+    document.querySelector('#' + id).style.display = null;
 }
 
-window.detalle = async function (id){
-	console.log(id);
-	
-	const respuesta = await fetch (URL + id);
-	const video = await respuesta.json();
+window.detalle = async function(id) {
+    console.log(id);
 
+    const respuesta = await fetch(URL + id);
+    const video = await respuesta.json();
+
+
+    document.querySelector('#detalle iframe').src = video.url;
+    document.querySelector('#detalle .card-title').textContent = video.titulo;
+    document.querySelector('#detalle .card-text').textContent = video.descripcion;
+    document.querySelector('#detalle .card-footer small').textContent = video.fecha;
+
+    const respuestaComentarios = await fetch(`${URL}${id}/comentarios`);
+    const comentarios = await respuestaComentarios.json();
+
+	const ul = document.querySelector('#detalle ul');
 	
-	document.querySelector('#detalle iframe').src = video.url;
-	document.querySelector('#detalle .card-title').textContent = video.titulo;
-	document.querySelector('#detalle .card-text').textContent = video.descripcion;
-	document.querySelector('#detalle .card-footer small').textContent = video.fecha;
+	ul.innerHTML = '';
 	
-	mostrar('detalle');
+    for (const comentario of comentarios) {
+        const li = document.createElement('li');
+
+        li.className = 'list-group-item d-flex justify-content-between align-items-start py-4';
+
+        li.innerHTML = `
+			<div class="ms-2 w-100">
+				<div class="d-flex">
+					<div class="fw-bold me-auto">
+						${comentario.usuario}
+					</div>
+					<span class="badge theme-primary rounded-pill aligns-selfs-baseline">${comentario.fechaHora}</span>
+				</div>
+				<p>${comentario.texto}</p>
+			</div>
+		`;
+		
+		ul.appendChild(li);
+    }
+
+    mostrar('detalle');
 }
 
 window.detalle(1);

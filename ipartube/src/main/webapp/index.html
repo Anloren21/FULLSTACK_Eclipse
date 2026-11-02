@@ -27,7 +27,8 @@
 			</button>
 			<div class="drawer-body mb-2 md:mb-0">
 				<ul class="nav navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link" href="javascript:listado()">Principal</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="javascript:listado()">Principal</a></li>
 				</ul>
 			</div>
 		</div>
@@ -45,8 +46,7 @@
 		<section id="detalle">
 			<div class="card  offset-lg-2 col-lg-8">
 				<div class="w-100 ratio-16x9 card-img">
-					<iframe class="w-100 ratio-16x9" src=""
-						title="" allowfullscreen></iframe>
+					<iframe class="w-100 ratio-16x9" src="" title="" allowfullscreen></iframe>
 				</div>
 				<div class="card-body">
 					<h5 class="card-title">
@@ -57,6 +57,27 @@
 				<div class="card-footer">
 					<small class="text-body-secondary"></small>
 				</div>
+			</div>
+
+			<div>
+				<ul class="mt-4 list-group">
+					<li
+						class="list-group-item d-flex justify-content-between align-items-start py-4">
+						<div class="ms-2 w-100">
+							<div class="d-flex">
+								<div class="fw-bold me-auto">
+									<input id="comentario-nombre" class="form-control">
+								</div>
+								<span
+									class="badge theme-primary rounded-pill aligns-selfs-baseline">2026-11-02
+									11:00</span>
+							</div>
+							<textarea id="comentario-texto" class="form-control col"></textarea>
+							<button class="btn-solid theme-primary">Enviar
+								comentario</button>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</section>
 
