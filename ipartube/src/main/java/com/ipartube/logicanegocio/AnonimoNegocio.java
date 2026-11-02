@@ -31,6 +31,7 @@ public class AnonimoNegocio {
 	}
 
 	public static ComentarioInsertarRespuesta crearNuevoComentario(ComentarioInsertar comentarioInsertar) {
+		log.info("Se va a insertar un nuevo comentario " + comentarioInsertar);
 		return ComentarioCrud.insertar(comentarioInsertar);
 	}
 }
