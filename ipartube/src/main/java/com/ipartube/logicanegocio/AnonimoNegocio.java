@@ -1,10 +1,8 @@
 package com.ipartube.logicanegocio;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import com.google.gson.JsonElement;
 import com.ipartube.accesodatos.ComentarioCrud;
 import com.ipartube.accesodatos.VideoCrud;
 import com.ipartube.dtos.Comentario;
