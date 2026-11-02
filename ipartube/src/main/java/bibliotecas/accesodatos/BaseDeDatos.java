@@ -40,4 +40,15 @@ public class BaseDeDatos {
 		}
 	}
 	
+	public static CallableStatement crearProcedimiento(String sql) {
+		try {
+			Connection con = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
+			CallableStatement cst = con.prepareCall(sql);
+			
+			return cst;
+		} catch (SQLException e) {
+			throw new RuntimeException("No se ha podido conectar a la base de datos", e);
+		}
+	}
+	
 }

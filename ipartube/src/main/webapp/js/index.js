@@ -10,7 +10,7 @@ comentarioForm.addEventListener('submit', async (e) => {
 
     // @formatter off
     const comentario = {
-        idUsuario: 1,
+        idUsuario: 4,
         texto: comentarioForm['comentario-texto'].value,
 		idVideo: idVideo
 	};
