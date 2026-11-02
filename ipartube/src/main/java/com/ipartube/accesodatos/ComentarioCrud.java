@@ -21,7 +21,7 @@ public class ComentarioCrud {
 
 			while (rs.next()) {
 				Comentario comentario = new Comentario(rs.getLong("id"),
-						rs.getTimestamp("fecha_hora").toLocalDateTime(), rs.getString("usuario"),
+						rs.getTimestamp("fecha_hora").toLocalDateTime(), rs.getString("nombre"),
 						rs.getString("texto"));
 				comentarios.add(comentario);
 			}
