@@ -26,6 +26,7 @@ comentarioForm.addEventListener('submit', async (e) => {
 	const comentarioRecibido = await respuesta.json();
 	
 	console.log(comentarioRecibido);
+	await rellenarComentariosVideos(idVideo);
 });
 
 // @formatter on
@@ -79,15 +80,16 @@ window.detalle = async function(id) {
 
 	idVideo = id;
 	
-    const respuesta = await fetch(URL_VIDEOS + id);
-    const video = await respuesta.json();
+    await rellenarDatosVideo(id);
 
+    await rellenarComentariosVideos(id);
 
-    document.querySelector('#detalle iframe').src = video.url;
-    document.querySelector('#detalle .card-title').textContent = video.titulo;
-    document.querySelector('#detalle .card-text').textContent = video.descripcion;
-    document.querySelector('#detalle .card-footer small').textContent = video.fecha;
+    mostrar('detalle');
+}
 
+window.detalle(1);
+
+async function rellenarComentariosVideos(id) {
     const respuestaComentarios = await fetch(`${URL_VIDEOS}${id}/comentarios`);
     const comentarios = await respuestaComentarios.json();
 
@@ -104,7 +106,7 @@ window.detalle = async function(id) {
 			<div class="ms-2 w-100">
 				<div class="d-flex">
 					<div class="fw-bold me-auto">
-						${comentario.usuario}
+						${comentario.nombre}
 					</div>
 					<span class="badge theme-primary rounded-pill aligns-selfs-baseline">${comentario.fechaHora}</span>
 				</div>
@@ -114,8 +116,15 @@ window.detalle = async function(id) {
 
         ul.appendChild(li);
     }
-
-    mostrar('detalle');
 }
 
-window.detalle(1);
+async function rellenarDatosVideo(id) {
+    const respuesta = await fetch(URL_VIDEOS + id);
+    const video = await respuesta.json();
+
+
+    document.querySelector('#detalle iframe').src = video.url;
+    document.querySelector('#detalle .card-title').textContent = video.titulo;
+    document.querySelector('#detalle .card-text').textContent = video.descripcion;
+    document.querySelector('#detalle .card-footer small').textContent = video.fecha;
+}
