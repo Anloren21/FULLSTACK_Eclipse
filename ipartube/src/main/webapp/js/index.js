@@ -1,5 +1,5 @@
 const URL_VIDEOS = 'api/v1/videos/';
-const URL_COMENTARIOS = 'api/v1/comentarios';
+const URL_COMENTARIOS = 'api/v1/comentarios/';
 
 let idVideo;
 
@@ -12,21 +12,29 @@ comentarioForm.addEventListener('submit', async (e) => {
     const comentario = {
         idUsuario: 4,
         texto: comentarioForm['comentario-texto'].value,
-		idVideo: idVideo
-	};
+        idVideo: idVideo
+    };
+
+    console.log(comentario);
+
+    const respuesta = await fetch(URL_COMENTARIOS, {
+        method: 'POST',
+        body: JSON.stringify(comentario),
+        headers: { 'Content-type': 'application/json' },
+    });
 	
-	console.log(comentario);
 	
-	const respuesta = await fetch(URL_COMENTARIOS, {
-		method: 'POST',
-		body: JSON.stringify(comentario),
-		headers: {'Content-type': 'application/json'},
-	});
-	
-	const comentarioRecibido = await respuesta.json();
-	
-	console.log(comentarioRecibido);
-	await rellenarComentariosVideos(idVideo);
+	if (!respuesta.ok) {
+	    throw new Error(
+	        "Error HTTP: " + respuesta.status
+	    );
+	}
+
+
+    const comentarioRecibido = await respuesta.json();
+
+    console.log(comentarioRecibido);
+    await rellenarComentariosVideos(idVideo);
 });
 
 // @formatter on
@@ -48,7 +56,7 @@ window.listado = async function() {
         card.innerHTML = `
 		<div class="card h-100">
 			<div class="w-100 ratio-16x9 card-img">
-			  <iframe class="w-100 ratio-16x9" src="${video.url}" title="${video.titulo}" allowfullscreen></iframe>
+			  	<iframe class="w-100 ratio-16x9" src="${video.url}" title="${video.titulo}" allowfullscreen></iframe>
 			</div>
 			<div class="card-body">
 				<h5 class="card-title"><a href="javascript:detalle(${video.id})">${video.titulo}</a></h5>
@@ -57,11 +65,69 @@ window.listado = async function() {
 			<div class="card-footer">
 				<small class="text-body-secondary">${video.fecha}</small>
 			</div>
+			</div>
 		</div>
-	</div>`;
+	`;
 
         listadoVideos.appendChild(card);
     }
+
+    const formularioVideo = document.createElement('div');
+
+    formularioVideo.className = 'col';
+
+    formularioVideo.innerHTML = `
+		<form class="card h-100">
+			<div class="w-100 ratio-16x9 card-img">
+			  <input name="url" class="form-control">
+			</div>
+			<div class="card-body">
+				<h5 class="card-title">
+					<input name="titulo" class="form-control">
+				</h5>
+				<p class="card-text">
+					<textarea name="descripcion" class="form-control"></textarea>
+				</p>
+				
+				<button class="btn-solid theme-primary">Añadir Video</button>
+			</div>
+			<div class="card-footer">
+				<small class="text-body-secondary">${new Date().toISOString()}</small>
+			</div>
+			</div>
+		</form>
+	`;
+
+	listadoVideos.appendChild(formularioVideo);
+	
+	
+	const videoForm = document.querySelector("#listado form");
+
+	videoForm.addEventListener('submit', async (e) => {
+		e.preventDefault();
+
+		// @formatter off
+		const video = {
+			url: videoForm.url.value,
+			titulo: videoForm.titulo.value,
+		    descripcion: videoForm.descripcion.value,
+		    idUsuario: 2
+		};
+
+		console.log(video);
+
+		const respuesta = await fetch(URL_VIDEOS, {
+		    method: 'POST',
+		    body: JSON.stringify(video),
+		    headers: { 'Content-type': 'application/json' },
+		});
+
+		const videoRecibido = await respuesta.json();
+
+		console.log(videoRecibido);
+		await listado();
+	})
+	
     mostrar('listado');
 }
 
@@ -78,16 +144,14 @@ function mostrar(id) {
 window.detalle = async function(id) {
     //console.log(id);
 
-	idVideo = id;
-	
+    idVideo = id;
+
     await rellenarDatosVideo(id);
 
     await rellenarComentariosVideos(id);
 
     mostrar('detalle');
 }
-
-window.detalle(1);
 
 async function rellenarComentariosVideos(id) {
     const respuestaComentarios = await fetch(`${URL_VIDEOS}${id}/comentarios`);
@@ -128,3 +192,5 @@ async function rellenarDatosVideo(id) {
     document.querySelector('#detalle .card-text').textContent = video.descripcion;
     document.querySelector('#detalle .card-footer small').textContent = video.fecha;
 }
+
+window.listado();
