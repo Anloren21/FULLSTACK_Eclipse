@@ -36,12 +36,12 @@ public class ComentarioCrud {
 
 	public static ComentarioInsertarRespuesta insertar(ComentarioInsertar comentarioInsertar) {
 		try (CallableStatement cst = BaseDeDatos
-				.crearProcedimiento("call comentarios_insertar(?,?,?,?,?)")) {
+				.crearProcedimiento("{call comentarios_insertar(?,?,?,?,?)}")) {
 			cst.registerOutParameter(1, Types.BIGINT);
 			cst.setObject(2, comentarioInsertar.fechaHora());
-			cst.setLong(3, comentarioInsertar.idUsuario());
-			cst.setString(4, comentarioInsertar.texto());
-			cst.setLong(5, comentarioInsertar.idVideo());
+			cst.setString(3, comentarioInsertar.texto());
+			cst.setLong(4, comentarioInsertar.idVideo());
+			cst.setLong(5, comentarioInsertar.idUsuario());
 
 			cst.executeUpdate();
 			
