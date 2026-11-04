@@ -1,23 +1,19 @@
 package com.ipartube.entidades;
 
-public class Usuario {
+public abstract class Usuario {
 	// Variables de instancia
-	private Long id;
-	private String nombre;
-	private String email;
-	private String password;
+	protected Long id;
+	protected String nombre;
 
 	// Constructores
-	public Usuario(Long id, String nombre, String email, String password) {
+	public Usuario(Long id, String nombre) {
 		super();
 		setId(id);
 		setNombre(nombre);
-		setEmail(email);
-		setPassword(password);
 	}
 	
-	public Usuario (Long long1) {
-		
+	public Usuario (Long id) {
+		this(id, null);
 	}
 
 	// Getter y setters
@@ -36,26 +32,13 @@ public class Usuario {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	
+	public abstract String getUsuario();
+	public abstract String getPassword();
 
 	@Override
 	public String toString() {
-		return String.format("Usuario [id=%s, nombre=%s, email=%s, password=%s]", id, nombre, email, password);
+		return String.format("Usuario [id=%s, nombre=%s]", id, nombre);
 	}
 
 	
