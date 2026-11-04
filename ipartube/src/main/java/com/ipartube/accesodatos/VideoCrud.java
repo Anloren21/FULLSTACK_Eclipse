@@ -8,13 +8,16 @@ import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import com.ipartube.dtos.Video;
-import com.ipartube.dtos.VideoInsertar;
-import com.ipartube.dtos.VideoInsertarRespuesta;
+import com.ipartube.dtos.VideoDto;
+import com.ipartube.entidades.*;
+import com.ipartube.dtos.VideoInsertarDto;
+import com.ipartube.dtos.VideoInsertarRespuestaDto;
 
 import bibliotecas.accesodatos.BaseDeDatos;
 
 public class VideoCrud {
+	
+	//TODO: Añadir usuario
 	public static ArrayList<Video> obtenerTodos() {
 		try (PreparedStatement pst = BaseDeDatos.crearSentencia("SELECT * FROM videos");
 				ResultSet rs = pst.executeQuery()) {
@@ -32,6 +35,7 @@ public class VideoCrud {
 		}
 	}
 
+	//TODO: Añadir usuario
 	public static Video obtenerPorId(Long id) {
 		try (PreparedStatement pst = BaseDeDatos.crearSentencia("SELECT * FROM videos WHERE id=?")) {
 			pst.setLong(1, id);
@@ -50,20 +54,23 @@ public class VideoCrud {
 		}
 	}
 	
-	public static VideoInsertarRespuesta insertar(VideoInsertar videoInsertar) {
+	public static Video insertar(Video video) {
 		try (CallableStatement cst = BaseDeDatos.crearProcedimiento("call videos_insert(?,?,?,?,?,?)")) {
 			cst.registerOutParameter(1, Types.BIGINT);
 			cst.registerOutParameter(2, Types.DATE);
-			cst.setString(3, videoInsertar.url());
-			cst.setString(4, videoInsertar.titulo());
-			cst.setString(5, videoInsertar.descripcion());
-			cst.setLong(6, videoInsertar.idUsuario());
+			cst.setString(3, video.getUrl());
+			cst.setString(4, video.getTitulo());
+			cst.setString(5, video.getDescripcion());
+			cst.setLong(6, video.getUsuario().getId());
 
 			cst.executeUpdate();
+			video.setId(cst.getLong(1));
+			video.setFecha(cst.getDate(2).toLocalDate());
 			
-			return new VideoInsertarRespuesta(cst.getLong(1), cst.getDate(2).toLocalDate(), videoInsertar.url(), videoInsertar.titulo(), videoInsertar.descripcion(), videoInsertar.idUsuario());
+			
+			return video;
 		} catch (SQLException e) {
-			throw new RuntimeException("Error al obtener el video " + videoInsertar.titulo(), e);
+			throw new RuntimeException("Error al obtener el video " + video, e);
 		}
 	}
 }
