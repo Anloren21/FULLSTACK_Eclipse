@@ -8,7 +8,7 @@ import com.ipartex.accesodatos.DaoMensaje;
 import com.ipartex.entidades.Mensaje;
 
 public class DaoMensajeTreeMap implements DaoMensaje {
-	
+
 	public DaoMensajeTreeMap() {
 		insertar(new Mensaje(1L, "Angie", "Hola Mundo", LocalDateTime.now()));
 		insertar(new Mensaje(2L, "Lorena", "Hola mi segundo nombre", LocalDateTime.now()));
@@ -21,6 +21,11 @@ public class DaoMensajeTreeMap implements DaoMensaje {
 	@Override
 	public Iterable<Mensaje> obtenerTodos() {
 		return mensajes.values();
+	}
+
+	@Override
+	public Iterable<Mensaje> obtenerParaPantalla() {
+		return mensajes.values().stream().sorted((a, b) -> - a.getFechaHora().compareTo(b.getFechaHora())).toList();
 	}
 
 	@Override

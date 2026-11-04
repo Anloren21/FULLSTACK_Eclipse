@@ -23,6 +23,10 @@ public class DaoMensajePruebas {
 			System.out.println(mensaje);
 		}
 		
+		for(Mensaje mensaje: dao.obtenerParaPantalla()) {
+			System.out.println(mensaje);
+		}
+		
 //		Iterable<Mensaje> i = dao.obtenerTodos();
 //		Iterator<Mensaje> it = i.iterator();
 //		
