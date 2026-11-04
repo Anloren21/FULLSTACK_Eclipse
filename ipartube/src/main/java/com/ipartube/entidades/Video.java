@@ -3,14 +3,14 @@ package com.ipartube.entidades;
 import java.time.LocalDate;
 
 public class Video {
-	public Long id;
-	public LocalDate fecha;
-	public String url;
-	public String titulo;
-	public String descripcion;
+	protected Long id;
+	protected LocalDate fecha;
+	protected String url;
+	protected String titulo;
+	protected String descripcion;
 
-	private Usuario usuario;
-
+	protected Usuario usuario;
+	
 	public Video(Long id, LocalDate fecha, String url, String titulo, String descripcion, Usuario usuario) {
 		super();
 		setId(id);

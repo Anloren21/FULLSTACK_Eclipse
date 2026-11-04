@@ -2,7 +2,7 @@ package com.ipartube.entidades;
 
 import java.time.LocalDateTime;
 
-public class Comentarios {
+public class Comentario {
 	private Long id;
 	private LocalDateTime FechaHora;
 	private String texto;
@@ -10,7 +10,7 @@ public class Comentarios {
 	private Video video;
 	private Usuario usuario;
 
-	public Comentarios(Long id, LocalDateTime fechaHora, String texto, Video video, Usuario usuario) {
+	public Comentario(Long id, LocalDateTime fechaHora, String texto, Video video, Usuario usuario) {
 		super();
 		setId(id);
 		setFechaHora(fechaHora);
@@ -19,7 +19,7 @@ public class Comentarios {
 		setVideo(video);
 	}
 
-	public Comentarios() {
+	public Comentario() {
 		
 	}
 	

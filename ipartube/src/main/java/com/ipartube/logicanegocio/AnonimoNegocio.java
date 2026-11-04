@@ -11,6 +11,7 @@ import com.ipartube.dtos.ComentarioInsertarRespuestaDto;
 import com.ipartube.dtos.VideoDto;
 import com.ipartube.dtos.VideoInsertarDto;
 import com.ipartube.dtos.VideoInsertarRespuestaDto;
+import com.ipartube.entidades.Comentario;
 import com.ipartube.entidades.Usuario;
 import com.ipartube.entidades.Video;
 
@@ -25,9 +26,10 @@ public class AnonimoNegocio {
 		ArrayList<VideoDto> videosDtos = new ArrayList<VideoDto>();
 
 		VideoDto videoDto;
-		
+
 		for (Video video : videos) {
-			videoDto = new VideoDto(video.getId(), video.getFecha(), video.getUrl(), video.getTitulo(), video.getDescripcion());
+			videoDto = new VideoDto(video.getId(), video.getFecha(), video.getUrl(), video.getTitulo(),
+					video.getDescripcion());
 			videosDtos.add(videoDto);
 		}
 
@@ -38,7 +40,7 @@ public class AnonimoNegocio {
 		log.info("Se ha pedido detalle del video " + id);
 
 		Video video = VideoCrud.obtenerPorId(id);
-		
+
 		return new VideoDto(video.getId(), video.getFecha(), video.getUrl(), video.getTitulo(), video.getDescripcion());
 	}
 
@@ -50,14 +52,24 @@ public class AnonimoNegocio {
 
 	public static ComentarioInsertarRespuestaDto crearNuevoComentario(ComentarioInsertarDto comentarioInsertar) {
 		log.info("Se va a insertar un nuevo comentario " + comentarioInsertar);
-		return ComentarioCrud.insertar(comentarioInsertar);
+
+		Usuario usuario = new Usuario(comentarioInsertar.idUsuario());
+		Video video = new Video(comentarioInsertar.idVideo(), null, null, null, null);
+		Comentario comentario = new Comentario(null, comentarioInsertar.fechaHora(), comentarioInsertar.texto(), video,
+				usuario);
+
+		ComentarioInsertarRespuestaDto comentarioInsertarRespuestaDto = new ComentarioInsertarRespuestaDto(comentario.getId(), comentario.getFechaHora(), comentario.getUsuario().getId(), comentario.getTexto(), comentario.getVideo().getId());
+		
+		return comentarioInsertarRespuestaDto;
 	}
 
 	public static VideoInsertarRespuestaDto crearNuevoVideo(VideoInsertarDto videoInsertar) {
 		log.info("Se va a insertar un nuevo video " + videoInsertar);
-		
-		Video video = VideoCrud.insertar(new Video(videoInsertar.url(), videoInsertar.titulo(), videoInsertar.descripcion(), new Usuario(videoInsertar.idUsuario())));
-		
-		return new VideoInsertarRespuestaDto(video.getId(), video.getFecha(), video.getUrl(), video.getTitulo(), video.getDescripcion(), videoInsertar.idUsuario());
+
+		Video video = VideoCrud.insertar(new Video(videoInsertar.url(), videoInsertar.titulo(),
+				videoInsertar.descripcion(), new Usuario(videoInsertar.idUsuario())));
+
+		return new VideoInsertarRespuestaDto(video.getId(), video.getFecha(), video.getUrl(), video.getTitulo(),
+				video.getDescripcion(), videoInsertar.idUsuario());
 	}
 }
