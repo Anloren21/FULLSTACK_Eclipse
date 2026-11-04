@@ -1,5 +1,5 @@
 package com.ipartube.dtos;
 
-public record ComentarioPost(Long idUsuario, String texto, Long idVideo) {
+public record ComentarioPostDto(Long idUsuario, String texto, Long idVideo) {
 
 }

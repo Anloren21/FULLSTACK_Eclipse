@@ -2,6 +2,6 @@ package com.ipartube.dtos;
 
 import java.time.LocalDateTime;
 
-public record Comentario(Long id, LocalDateTime fechaHora, String nombre, String texto) {
+public record ComentarioDto(Long id, LocalDateTime fechaHora, String nombre, String texto) {
 
 }
