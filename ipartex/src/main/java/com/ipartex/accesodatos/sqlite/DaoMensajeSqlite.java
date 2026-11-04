@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -14,8 +15,8 @@ import com.ipartex.entidades.Mensaje;
 
 public class DaoMensajeSqlite implements DaoMensaje {
 	private static final String JDBC_URL = "jdbc:sqlite:ipartex.db";
-	private static final String JDBC_USER = "ipartex_admin";
-	private static final String JDBC_PASS = "ipartex";
+	private static final String JDBC_USER = "";
+	private static final String JDBC_PASS = "";
 
 	@Override
 	public Iterable<Mensaje> obtenerTodos() {
@@ -26,7 +27,7 @@ public class DaoMensajeSqlite implements DaoMensaje {
 
 			while (rs.next()) {
 				Mensaje mensaje = new Mensaje(rs.getLong("id"), rs.getString("nombre"), rs.getString("texto"),
-						rs.getTimestamp("fecha_hora").toLocalDateTime());
+						LocalDateTime.parse(rs.getString("fecha_hora")));
 
 				mensajes.add(mensaje);
 			}
@@ -46,7 +47,7 @@ public class DaoMensajeSqlite implements DaoMensaje {
 
 			while (rs.next()) {
 				Mensaje mensaje = new Mensaje(rs.getLong("id"), rs.getString("nombre"), rs.getString("texto"),
-						rs.getTimestamp("fecha_hora").toLocalDateTime());
+						LocalDateTime.parse(rs.getString("fecha_hora")));
 
 				mensajes.add(mensaje);
 			}
@@ -67,7 +68,7 @@ public class DaoMensajeSqlite implements DaoMensaje {
 
 			if (rs.next()) {
 				return Optional.of(new Mensaje(rs.getLong("id"), rs.getString("nombre"), rs.getString("texto"),
-						rs.getTimestamp("fecha_hora").toLocalDateTime()));
+						LocalDateTime.parse(rs.getString("fecha_hora"))));
 
 			}
 
@@ -84,7 +85,7 @@ public class DaoMensajeSqlite implements DaoMensaje {
 						.prepareStatement("INSERT INTO mensajes (nombre, texto, fecha_hora) VALUES (?,?,?,?)")) {
 			pst.setString(1, mensaje.getNombre());
 			pst.setString(2, mensaje.getNombre());
-			pst.setObject(3, mensaje.getFechaHora());
+			pst.setString(3, mensaje.getFechaHora().toString());
 
 			pst.executeUpdate();
 
@@ -107,7 +108,7 @@ public class DaoMensajeSqlite implements DaoMensaje {
 						.prepareStatement("UPDATE mensajes SET nombre=?, texto=?, fecha_hora=? WHERE id=?")) {
 			pst.setString(1, mensaje.getNombre());
 			pst.setString(2, mensaje.getNombre());
-			pst.setObject(3, mensaje.getFechaHora());
+			pst.setString(3, mensaje.getFechaHora().toString());
 			pst.setLong(4, mensaje.getId());
 
 			pst.executeUpdate();
