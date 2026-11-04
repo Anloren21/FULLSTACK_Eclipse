@@ -13,11 +13,14 @@ public class DaoMensajePruebas {
 		DaoMensaje dao = new DaoMensajeTreeMap();
 
 		dao.insertar(new Mensaje(null, "Angie", "Hola a todos", LocalDateTime.now()));
+		dao.insertar(new Mensaje(null, "Melon", "Que guay estar aquí", LocalDateTime.now()));
 		
-		dao.modificar(new Mensaje(5L, "David", "Hola ya volvi", LocalDateTime.now()));
 
-		System.out.println(dao.obtenerPorId(5L));
+		System.out.println(dao.obtenerPorId(6L));
 		System.out.println(dao.obtenerPorId(55L));
+
+		dao.modificar(new Mensaje(5L, "David", "Hola ya volvi", LocalDateTime.now()));
+		dao.borrar(5L);
 		
 		for(Mensaje mensaje: dao.obtenerTodos()) {
 			System.out.println(mensaje);
