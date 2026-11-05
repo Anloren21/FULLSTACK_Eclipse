@@ -1,88 +1,62 @@
 package com.ipartex.accesodatos.sqlite;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Optional;
 
-import com.ipartex.accesodatos.AccesoDatosException;
 import com.ipartex.accesodatos.DaoMensaje;
 import com.ipartex.entidades.Mensaje;
 
+import bibliotecas.accesodatos.AccesoDatosException;
+import bibliotecas.accesodatos.JdbcHelper;
+import bibliotecas.accesodatos.JdbcHelperImpl;
+
 public class DaoMensajeSqlite implements DaoMensaje {
-	private static final String JDBC_URL = "jdbc:sqlite:ipartex.db";
-	private static final String JDBC_USER = "";
-	private static final String JDBC_PASS = "";
-
-	private Optional<Mensaje> ejecutarUnoSql(String sql, Object... args) {
-		return ejecutarSql(sql, args).stream().findFirst();
-	}
-
-	private Collection<Mensaje> ejecutarSql(String sql, Object... args) {
-		try (Connection con = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
-				PreparedStatement pst = con.prepareStatement(sql)) {
-			int i = 1;
-
-			for (Object arg : args) {
-				pst.setObject(i++, arg);
-			}
-
-			Collection<Mensaje> mensajes = new ArrayList<>();
-
-			if (pst.execute()) {
-				
-				ResultSet rs = pst.getResultSet();
-				while (rs.next()) {
-					Mensaje mensaje = new Mensaje(rs.getLong("id"), rs.getString("nombre"), rs.getString("texto"),
-							LocalDateTime.parse(rs.getString("fecha_hora")));
-
-					mensajes.add(mensaje);
-				}
-				return mensajes;
-			}else {
-				ResultSet rs = pst.getResultSet();
-
-				if(rs.next()) {
-					mensajes.add(new Mensaje(rs.getLong(1), null, null, null));
-				}
-			}
-			return mensajes;
+	private JdbcHelper<Mensaje> jdbc = new JdbcHelperImpl<>();
+	
+	private static Mensaje mapper(ResultSet rs){
+		try {
+			return new Mensaje(rs.getLong("id"), rs.getString("nombre"), rs.getString("texto"),
+					LocalDateTime.parse(rs.getString("fecha_hora")));
 		} catch (SQLException e) {
-			throw new AccesoDatosException("Fallo en la operación de la base de datos");
+			throw new AccesoDatosException("No se ha podido mapear el objeto", e);
+		}
+	}
+	
+	private static Mensaje mapperId(ResultSet rs){
+		try {
+			return new Mensaje(rs.getLong(1),null, null, null);
+		} catch (SQLException e) {
+			throw new AccesoDatosException("No se ha podido mapear el objeto", e);
 		}
 	}
 
 	@Override
 	public Iterable<Mensaje> obtenerTodos() {
-		return ejecutarSql("SELECT * FROM mensajes");
+		return jdbc.ejecutarSql("SELECT * FROM mensajes", DaoMensajeSqlite::mapper);
 	}
 
 	@Override
 	public Iterable<Mensaje> obtenerParaPantalla() {
-		return ejecutarSql("SELECT * FROM mensajes ORDER BY fecha_hora DESC");
+		return jdbc.ejecutarSql("SELECT * FROM mensajes ORDER BY fecha_hora DESC", DaoMensajeSqlite::mapper);
 	}
 
 	@Override
 	public Optional<Mensaje> obtenerPorId(Long id) {
-		return ejecutarUnoSql("SELECT * FROM mensajes WHERE id=?", id);
+		return jdbc.ejecutarUnoSql("SELECT * FROM mensajes WHERE id=?", DaoMensajeSqlite::mapper, id);
 	}
 
 	@Override
 	public Mensaje insertar(Mensaje mensaje) {
-		mensaje.setId(ejecutarUnoSql("INSERT INTO mensajes (nombre, texto, fecha_hora) VALUES (?,?,?)",
+		mensaje.setId(jdbc.ejecutarUnoSql("INSERT INTO mensajes (nombre, texto, fecha_hora) VALUES (?,?,?)", DaoMensajeSqlite::mapperId,
 				mensaje.getNombre(), mensaje.getTexto(), mensaje.getFechaHora().toString()).get().getId());
 		return mensaje;
 	}
 
 	@Override
 	public Mensaje modificar(Mensaje mensaje) {
-		ejecutarSql("UPDATE mensajes SET nombre=?, texto=?, fecha_hora=? WHERE id=?", mensaje.getNombre(),
+		jdbc.ejecutarSql("UPDATE mensajes SET nombre=?, texto=?, fecha_hora=? WHERE id=?", null, mensaje.getNombre(),
 				mensaje.getNombre(), mensaje.getFechaHora().toString(), mensaje.getId());
 
 		return mensaje;
@@ -90,7 +64,7 @@ public class DaoMensajeSqlite implements DaoMensaje {
 
 	@Override
 	public void borrar(Long id) {
-		ejecutarSql("DELETE FROM mensajesWHERE id=?", id);
+		jdbc.ejecutarSql("DELETE FROM mensajesWHERE id=?", null, id);
 	}
 
 }
