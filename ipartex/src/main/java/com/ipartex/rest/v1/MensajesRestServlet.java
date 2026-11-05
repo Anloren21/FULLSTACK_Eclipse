@@ -19,10 +19,10 @@ public class MensajesRestServlet extends HttpServlet {
 	private static final JsonHelper JSON = (JsonHelper) ContenedorInyeccionDependencias.obtenerObjeto("jsonhelper");
 	private static final AnonimoNegocio NEGOCIO = (AnonimoNegocio) ContenedorInyeccionDependencias.obtenerObjeto("negocio.anonimo");
 
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("application/json");
 		response.getWriter().append(JSON.objetoAJson(NEGOCIO.listarMensajes()));
 	}
-
 }
