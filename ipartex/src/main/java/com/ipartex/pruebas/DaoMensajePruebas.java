@@ -1,7 +1,8 @@
 package com.ipartex.pruebas;
 
-import com.ipartex.accesodatos.map.DaoMensajeTreeMap;
 import com.ipartex.entidades.Mensaje;
+
+import bibliotecas.inyecciondependencias.ContenedorInyeccionDependencias;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +10,7 @@ import com.ipartex.accesodatos.DaoMensaje;
 
 public class DaoMensajePruebas {
 	public static void main(String[] args) {
-		DaoMensaje dao = new DaoMensajeTreeMap();
+		DaoMensaje dao = (DaoMensaje) ContenedorInyeccionDependencias.obtenerObjeto("dao.mensaje");
 
 		dao.insertar(new Mensaje(null, "Angie", "Hola a todos", LocalDateTime.now()));
 		dao.insertar(new Mensaje(null, "Melon", "Que guay estar aquí", LocalDateTime.now()));

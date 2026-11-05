@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Function;
 
-
 public class JdbcHelperImpl<T> implements JdbcHelper<T> {
 	private static final String JDBC_DRIVER;
 	private static final String JDBC_URL;
@@ -23,16 +22,16 @@ public class JdbcHelperImpl<T> implements JdbcHelper<T> {
 		try {
 			Properties props = new Properties();
 			props.load(JdbcHelperImpl.class.getClassLoader().getResourceAsStream("aplicacion.properties"));
-			
+
 			JDBC_DRIVER = props.getProperty("jdbc.driver");
 			JDBC_URL = props.getProperty("jdbc.url");
 			JDBC_USER = props.getProperty("jdbc.user");
 			JDBC_PASS = props.getProperty("jdbc.pass");
-			
+
 			Class.forName(JDBC_DRIVER);
 		} catch (ClassNotFoundException e) {
-			throw new AccesoDatosException("No se ha encontrado el driver " , e);
-		}catch (IOException e){
+			throw new AccesoDatosException("No se ha encontrado el driver ", e);
+		} catch (IOException e) {
 			throw new AccesoDatosException("No se ha podido abrir la configuración");
 		}
 	}
@@ -44,8 +43,10 @@ public class JdbcHelperImpl<T> implements JdbcHelper<T> {
 
 	@Override
 	public Collection<T> ejecutarSql(String sql, Function<ResultSet, T> mapper, Object... args) {
+
 		try (Connection con = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
 				PreparedStatement pst = con.prepareStatement(sql)) {
+
 			int i = 1;
 
 			for (Object arg : args) {
@@ -56,20 +57,22 @@ public class JdbcHelperImpl<T> implements JdbcHelper<T> {
 
 			if (pst.execute()) {
 
-				ResultSet rs = pst.getResultSet();
-				while (rs.next()) {
-					objetos.add(mapper.apply(rs));
+				try (ResultSet rs = pst.getResultSet()) {
+					while (rs.next()) {
+						objetos.add(mapper.apply(rs));
+					}
 				}
 
-				return objetos;
 			} else {
-				ResultSet rs = pst.getResultSet();
+				// INSERT, UPDATE o DELETE.
+				// No hay ResultSet que recorrer.
+				int filasAfectadas = pst.getUpdateCount();
 
-				if (rs.next()) {
-					objetos.add(mapper.apply(rs));
-				}
+				System.out.println("Filas afectadas: " + filasAfectadas);
 			}
+
 			return objetos;
+
 		} catch (SQLException e) {
 			throw new AccesoDatosException("Fallo en la operación de la base de datos", e);
 		}
